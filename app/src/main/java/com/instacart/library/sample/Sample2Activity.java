@@ -68,8 +68,8 @@ public class Sample2Activity
                             deviceTime.getTime(),
                             (trueTime.getTime() - deviceTime.getTime()) / 1000F));
 
-        //setTime(TrueTimeRx.now().getTime());
-        SystemClock.setCurrentTimeMillis(TrueTimeRx.now().getTime());
+        SystemClock.setCurrentTimeMillis
+                (TrueTimeRx.now().getTime());  // require setting with root: chmod 644 /dev/alarm
         timeEST.setText(getString(R.string.tt_time_pst,
                 _formatDate(trueTime, "yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("GMT-04:00"))));
         timeDeviceTime.setText(getString(R.string.tt_time_device,
