@@ -8,14 +8,13 @@
     android:layout_height="match_parent"
     tools:context="com.instacart.library.sample.SampleActivity">
 
-    <TextView
-        android:id="@+id/tt_time_pst"
-
+    <Button
+        android:id="@+id/tt_btn_refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:text="GMT time goes here"
-        android:textSize="20dp"
+        android:layout_marginTop="16dp"
+        android:text="Get Time NOW"
 
         app:layout_constraintBottom_toBottomOf="@+id/activity_main"
         app:layout_constraintLeft_toLeftOf="@+id/activity_main"
@@ -26,18 +25,18 @@
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1"/>
 
+
     <TextView
-        android:id="@+id/tt_time_gmt"
+        android:id="@+id/tt_time_pst"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="16dp"
-        android:text="PST time goes here"
-
+        android:text="GMT time goes here"
         android:textSize="20dp"
-        app:layout_constraintRight_toRightOf="@+id/tt_time_pst"
-        app:layout_constraintTop_toBottomOf="@+id/tt_time_pst"
+
+        app:layout_constraintRight_toRightOf="@+id/tt_btn_refresh"
+        app:layout_constraintTop_toBottomOf="@+id/tt_btn_refresh"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1"/>
 
@@ -51,27 +50,30 @@
         android:text="Device time goes here"
         android:textSize="20dp"
 
-        app:layout_constraintBottom_toTopOf="@+id/tt_time_pst"
-        app:layout_constraintHorizontal_bias="0.47"
-        app:layout_constraintLeft_toLeftOf="@+id/activity_main"
-        app:layout_constraintRight_toRightOf="@+id/activity_main"
-        tools:layout_constraintBottom_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"/>
+        app:layout_constraintRight_toRightOf="@+id/tt_time_pst"
+        app:layout_constraintTop_toBottomOf="@+id/tt_time_pst"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1"/>
 
-    <Button
-        android:id="@+id/tt_btn_refresh"
+
+    <TextView
+        android:id="@+id/tt_time_offset"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
         android:layout_marginTop="16dp"
-        android:text="Get Time NOW"
-        app:layout_constraintLeft_toLeftOf="@+id/activity_main"
-        app:layout_constraintRight_toRightOf="@+id/activity_main"
-        app:layout_constraintTop_toBottomOf="@+id/tt_time_gmt"
-        tools:layout_constraintLeft_creator="1"
+        android:text="Offset goes here"
+
+        android:textSize="20dp"
+        app:layout_constraintRight_toRightOf="@+id/tt_time_device"
+        app:layout_constraintTop_toBottomOf="@+id/tt_time_device"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1"/>
+
+
+
+
 
 
 </android.support.constraint.ConstraintLayout>

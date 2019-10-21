@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.instacart.library.truetime"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdkVersion
 
         versionCode rootProject.ext.versionCode

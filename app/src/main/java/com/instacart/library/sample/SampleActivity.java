@@ -22,8 +22,6 @@ public class SampleActivity
       extends AppCompatActivity {
 
     @BindView(R.id.tt_btn_refresh) Button refreshBtn;
-    @BindView(R.id.tt_time_gmt) TextView timeGMT;
-    @BindView(R.id.tt_time_pst) TextView timePST;
     @BindView(R.id.tt_time_device) TextView timeDeviceTime;
 
     @Override
@@ -44,10 +42,6 @@ public class SampleActivity
         Date trueTime = TrueTime.now();
         Date deviceTime = new Date();
 
-        timeGMT.setText(getString(R.string.tt_time_gmt,
-                                  _formatDate(trueTime, "yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("GMT"))));
-        timePST.setText(getString(R.string.tt_time_pst,
-                                  _formatDate(trueTime, "yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("GMT-07:00"))));
         timeDeviceTime.setText(getString(R.string.tt_time_device,
                                          _formatDate(deviceTime, "yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("GMT-07:00"))));
     }
