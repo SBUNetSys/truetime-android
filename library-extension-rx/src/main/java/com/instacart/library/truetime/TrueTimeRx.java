@@ -1,6 +1,9 @@
 package com.instacart.library.truetime;
 
 import android.content.Context;
+import android.os.SystemClock;
+import android.util.Log;
+
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
@@ -25,28 +28,15 @@ import org.reactivestreams.Publisher;
 public class TrueTimeRx
       extends TrueTime {
 
-    private static final TrueTimeRx RX_INSTANCE = new TrueTimeRx();
     private static final String TAG = TrueTimeRx.class.getSimpleName();
 
     private int _retryCount = 50;
 
-    public static TrueTimeRx build() {
-        return RX_INSTANCE;
-    }
-
+    public String _ntpPoolAddress = "time.google.com";
     public TrueTimeRx withSharedPreferencesCache(Context context) {
-        super.withSharedPreferencesCache(context);
         return this;
     }
 
-    /**
-     * Provide your own cache interface to cache the true time information.
-     * @param cacheInterface the customized cache interface to save the true time data.
-     */
-    public TrueTimeRx withCustomizedCache(CacheInterface cacheInterface) {
-        super.withCustomizedCache(cacheInterface);
-        return this;
-    }
 
     public TrueTimeRx withConnectionTimeout(int timeout) {
         super.withConnectionTimeout(timeout);
@@ -79,15 +69,39 @@ public class TrueTimeRx
     }
 
     /**
+     * @return Date object that returns the current time in the default Timezone
+     */
+    public Date now() {
+//        if (!isInitialized()) {
+//            throw new IllegalStateException("You need to call init() on TrueTime at least once.");
+//        }
+        Date ret = null;
+        try {
+            initializeRx(_ntpPoolAddress);
+
+            long cachedSntpTime = _getCachedSntpTime();
+            long cachedDeviceUptime = _getCachedDeviceUptime();
+            long deviceUptime = SystemClock.elapsedRealtime();
+            long now = cachedSntpTime + (deviceUptime - cachedDeviceUptime);
+            ret = new Date(now);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return ret;
+    }
+
+    /**
      * Initialize TrueTime
      * See {@link #initializeNtp(String)} for details on working
      *
      * @return accurate NTP Date
      */
     public Single<Date> initializeRx(String ntpPoolAddress) {
-        return isInitialized()
-                ? Single.just(now())
-                : initializeNtp(ntpPoolAddress).map(new Function<long[], Date>() {
+        _ntpPoolAddress = ntpPoolAddress;
+        Log.d(TAG, "initializeRx: " + ntpPoolAddress);
+
+        return initializeNtp(ntpPoolAddress).map(new Function<long[], Date>() {
                     @Override
                     public Date apply(long[] longs) throws Exception {
                         return now();
@@ -108,6 +122,7 @@ public class TrueTimeRx
      * See RESPONSE_INDEX_ prefixes in {@link SntpClient} for details
      */
     public Single<long[]> initializeNtp(String ntpPool) {
+        Log.i(TAG, "initializeNtp......" + ntpPool);
         return Flowable
               .just(ntpPool)
               .compose(resolveNtpPoolToIpAddresses())
@@ -126,11 +141,11 @@ public class TrueTimeRx
      * @return Observable of detailed long[] containing most important parts of the actual NTP response
      * See RESPONSE_INDEX_ prefixes in {@link SntpClient} for details
      */
-    public Single<long[]> initializeNtp(List<InetAddress> resolvedNtpAddresses) {
-        return Flowable.fromIterable(resolvedNtpAddresses)
-               .compose(performNtpAlgorithm())
-               .firstOrError();
-    }
+//    public Single<long[]> initializeNtp(List<InetAddress> resolvedNtpAddresses) {
+//        return Flowable.fromIterable(resolvedNtpAddresses)
+//               .compose(performNtpAlgorithm())
+//               .firstOrError();
+//    }
 
     /**
      * Transformer that takes in a pool of NTP addresses
@@ -162,7 +177,6 @@ public class TrueTimeRx
                           @Override
                           public void accept(long[] ntpResponse) {
                               cacheTrueTimeInfo(ntpResponse);
-                              saveTrueTimeInfoToDisk();
                           }
                       });
             }
@@ -179,7 +193,7 @@ public class TrueTimeRx
                           @Override
                           public Flowable<InetAddress> apply(String ntpPoolAddress) {
                               try {
-                                  TrueLog.d(TAG, "---- resolving ntpHost : " + ntpPoolAddress);
+                                  Log.d(TAG, "---- resolving ntpHost : " + ntpPoolAddress);
                                   return Flowable.fromArray(InetAddress.getAllByName(ntpPoolAddress));
                               } catch (UnknownHostException e) {
                                   return Flowable.error(e);
@@ -205,7 +219,7 @@ public class TrueTimeRx
                                       public void subscribe(@NonNull FlowableEmitter<long[]> o)
                                           throws Exception {
 
-                                          TrueLog.d(TAG,
+                                          Log.d(TAG,
                                               "---- requestTime from: " + singleIpHostAddress);
                                           try {
                                               o.onNext(requestTime(singleIpHostAddress));
@@ -219,7 +233,7 @@ public class TrueTimeRx
                                     .doOnError(new Consumer<Throwable>() {
                                         @Override
                                         public void accept(Throwable throwable) {
-                                            TrueLog.e(TAG, "---- Error requesting time", throwable);
+                                            Log.e(TAG, "---- Error requesting time", throwable);
                                         }
                                     })
                                     .retry(_retryCount);
@@ -245,7 +259,7 @@ public class TrueTimeRx
                     }
                 });
 
-                TrueLog.d(TAG, "---- filterLeastRoundTrip: " + responseTimeList);
+                Log.d(TAG, "---- filterLeastRoundTrip: " + responseTimeList);
 
                 return responseTimeList.get(0);
             }
@@ -265,7 +279,7 @@ public class TrueTimeRx
                     }
                 });
 
-                TrueLog.d(TAG, "---- bestResponse: " + Arrays.toString(bestResponses.get(bestResponses.size() / 2)));
+                Log.d(TAG, "---- bestResponse: " + Arrays.toString(bestResponses.get(bestResponses.size() / 2)));
 
                 return bestResponses.get(bestResponses.size() / 2);
             }

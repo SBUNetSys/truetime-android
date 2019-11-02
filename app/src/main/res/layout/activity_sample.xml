@@ -6,7 +6,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.instacart.library.sample.SampleActivity">
+    tools:context="com.instacart.library.sample.Sample2Activity">
 
     <Button
         android:id="@+id/tt_btn_refresh"
