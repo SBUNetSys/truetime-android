@@ -3,6 +3,7 @@ package com.instacart.library.sample;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -49,9 +50,13 @@ public class SampleActivity
         getSupportActionBar().setTitle("TrueTimeRx");
         initRxTrueTime();
 
+        // for removing network block policy by Android StrictMode
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         ButterKnife.bind(this);
         calendar = Calendar.getInstance();
-        _trueTimeRx.initializeNtp(_ntpPoolAddr);
+        //_trueTimeRx.initializeNtp(_ntpPoolAddr);
         refreshBtn.setEnabled(true);
     }
 
@@ -87,10 +92,7 @@ public class SampleActivity
     }
 
     private void updateTime() {
-//        if (!_trueTimeRx.isInitialized()) {
-//            Toast.makeText(this, "Sorry TrueTime not yet initialized.", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+        //initRxTrueTime();
         Date trueTime = _trueTimeRx.now();
         if (trueTime == null) {
             Toast.makeText(this, "Sorry TrueTime get Now() failed", Toast.LENGTH_SHORT).show();

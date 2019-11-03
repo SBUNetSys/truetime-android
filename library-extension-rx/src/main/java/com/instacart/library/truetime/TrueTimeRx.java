@@ -77,8 +77,12 @@ public class TrueTimeRx
 //        }
         Date ret = null;
         try {
-            initializeRx(_ntpPoolAddress);
-
+            //initializeRx(_ntpPoolAddress);
+            SNTP_CLIENT.requestTime("216.239.35.8",
+                    _rootDelayMax,
+                    _rootDispersionMax,
+                    _serverResponseDelayMax,
+                    _udpSocketTimeoutInMillis);
             long cachedSntpTime = _getCachedSntpTime();
             long cachedDeviceUptime = _getCachedDeviceUptime();
             long deviceUptime = SystemClock.elapsedRealtime();

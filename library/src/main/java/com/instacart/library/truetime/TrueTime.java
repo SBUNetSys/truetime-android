@@ -14,10 +14,10 @@ public class TrueTime {
     private final static TrueTime INSTANCE = new TrueTime();
     public final SntpClient SNTP_CLIENT = new SntpClient();
 
-    private static float _rootDelayMax = 100;
-    private static float _rootDispersionMax = 100;
-    private static int _serverResponseDelayMax = 750;
-    private static int _udpSocketTimeoutInMillis = 30_000;
+    public static float _rootDelayMax = 100;
+    public static float _rootDispersionMax = 100;
+    public static int _serverResponseDelayMax = 750;
+    public static int _udpSocketTimeoutInMillis = 30_000;
 
     //private String _ntpHost = "1.us.pool.ntp.org";
     private String _ntpHost = "0";
