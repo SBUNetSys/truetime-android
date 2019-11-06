@@ -156,14 +156,15 @@ public class SntpClient {
             }
 
             t[RESPONSE_INDEX_DISPERSION] = read(buffer, INDEX_ROOT_DISPERSION);
-            double rootDispersion = doubleMillis(t[RESPONSE_INDEX_DISPERSION]);
-            if (rootDispersion > rootDispersionMax) {
-                throw new InvalidNtpServerResponseException(
-                    "Invalid response from NTP server. %s violation. %f [actual] > %f [expected]",
-                    "root_dispersion",
-                    (float) rootDispersion,
-                    rootDispersionMax);
-            }
+            // This part of comparison is not necessary
+//            double rootDispersion = doubleMillis(t[RESPONSE_INDEX_DISPERSION]);
+//            if (rootDispersion > rootDispersionMax) {
+//                throw new InvalidNtpServerResponseException(
+//                    "Invalid response from NTP server. %s violation. %f [actual] > %f [expected]",
+//                    "root_dispersion",
+//                    (float) rootDispersion,
+//                    rootDispersionMax);
+//            }
 
             final byte mode = (byte) (buffer[0] & 0x7);
             if (mode != 4 && mode != 5) {
@@ -206,7 +207,7 @@ public class SntpClient {
             return t;
 
         } catch (Exception e) {
-            Log.d(TAG, "---- SNTP request failed for " + ntpHost);
+            Log.w(TAG, "---- SNTP request failed for " + ntpHost);
             throw e;
         } finally {
             if (socket != null) {

@@ -33,6 +33,8 @@ public class TrueTimeRx
     private int _retryCount = 50;
 
     public String _ntpPoolAddress = "time.google.com";
+    //public String _ntpHost = "216.239.35.8";
+    public String _ntpHost = "192.168.1.2";
     public TrueTimeRx withSharedPreferencesCache(Context context) {
         return this;
     }
@@ -78,11 +80,11 @@ public class TrueTimeRx
         Date ret = null;
         try {
             //initializeRx(_ntpPoolAddress);
-            SNTP_CLIENT.requestTime("216.239.35.8",
-                    _rootDelayMax,
-                    _rootDispersionMax,
-                    _serverResponseDelayMax,
-                    _udpSocketTimeoutInMillis);
+            SNTP_CLIENT.requestTime(_ntpHost,
+                                    _rootDelayMax,
+                                    _rootDispersionMax,
+                                    _serverResponseDelayMax,
+                                    _udpSocketTimeoutInMillis);
             long cachedSntpTime = _getCachedSntpTime();
             long cachedDeviceUptime = _getCachedDeviceUptime();
             long deviceUptime = SystemClock.elapsedRealtime();

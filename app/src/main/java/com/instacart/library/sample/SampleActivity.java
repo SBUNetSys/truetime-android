@@ -1,7 +1,5 @@
 package com.instacart.library.sample;
 
-import android.app.AlarmManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.os.SystemClock;
@@ -12,12 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.instacart.library.truetime.Shell;
-import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
